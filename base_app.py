@@ -28,8 +28,8 @@ import joblib,os
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 # Data dependencies
-import texthero as hero
-from texthero import preprocessing
+
+
 import pandas as pd
 import numpy as np
 import seaborn as sns 
