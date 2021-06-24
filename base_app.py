@@ -33,13 +33,15 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 import pandas as pd
 import numpy as np
 import seaborn as sns 
+#import nltk
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from PIL import Image
 from wordcloud import WordCloud
-from nltk.tokenize import TweetTokenizer
-from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.corpus import stopwords
+#from nltk.tokenize import TweetTokenizer
+#from nltk.stem import WordNetLemmatizer
+#nltk.download('wordnet')
+#from nltk.corpus import stopwords
 from string import punctuation
 
 
@@ -67,13 +69,13 @@ df_clean['sentiment'].replace(0, 'Neutral', inplace=True)
 df_clean['sentiment'].replace(-1, 'Negative', inplace=True)
 
 # Cleaner function 
-def preprocess(post):
-    from nltk.corpus import stopwords
-    tknzr = TweetTokenizer()
-    tokens = tknzr.tokenize(post.lower())
-    stopwords = set(stopwords.words('english'))
-    clean = [WordNetLemmatizer().lemmatize(token)for token in tokens if token.isalpha() and token not in punctuation and token not in stopwords]
-    return ' '.join(clean) 
+#def preprocess(post):
+    #from nltk.corpus import stopwords
+    #tknzr = TweetTokenizer()
+    #tokens = tknzr.tokenize(post.lower())
+    #stopwords = set(stopwords.words('english'))
+    #clean = [WordNetLemmatizer().lemmatize(token)for token in tokens if token.isalpha() and token not in punctuation and token not in stopwords]
+    #return ' '.join(clean) 
 
 
 
@@ -182,7 +184,7 @@ def main():
 
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text (max. 280 characters):")
-		input_text = preprocess(tweet_text)
+		#input_text = preprocess(tweet_text)
 		# models to use
 		models = ['Select Option' ,'Logistic Regression', 'Naive Bayes', 'Random Forest']
 		prediction_model = st.selectbox('Choose model', models)
@@ -200,19 +202,19 @@ def main():
 
 			# Logistic Regression
 			if prediction_model == 'Logistic Regression':
-				vect_text = tweet_cv.transform([input_text]).toarray()
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
 				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
 			
 			# Naive Nayes
 			if prediction_model == 'Naive Bayes':
-				vect_text = tweet_vec.transform([input_text]).toarray()
+				vect_text = tweet_vec.transform([tweet_text]).toarray()
 				predictor = joblib.load(open(os.path.join("resources/lr_final_clean_unbalanced.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
 			
 			# Random Forest model, will keep it commented until we can find a proper model to use.
 			if prediction_model == 'Random Forest':
-				vect_text = tweet_vec.transform([input_text]).toarray() 
+				vect_text = tweet_vec.transform([tweet_text]).toarray() 
 				predictor = joblib.load(open(os.path.join("resources/lgbm_class_clean_unbalanced.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
 			
